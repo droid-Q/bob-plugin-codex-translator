@@ -26,6 +26,7 @@ jobs:
           node --check plugin/main.js
           node --test test/bridge.test.mjs
           jq empty plugin/info.json
+          jq empty ocr-plugin/info.json
 
       - name: Build Bob plugin
         id: package
@@ -33,19 +34,28 @@ jobs:
         run: |
           set -euo pipefail
           version="$(jq -er '.version | select(type == "string")' plugin/info.json)"
+          ocr_version="$(jq -er '.version | select(type == "string")' ocr-plugin/info.json)"
           if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]]; then
             echo "Invalid plugin version: $version" >&2
             exit 1
           fi
+          if [[ "$ocr_version" != "$version" ]]; then
+            echo "Plugin versions do not match: $version != $ocr_version" >&2
+            exit 1
+          fi
 
           tag="v${version}"
-          asset="codex-local-translator-${tag}.bobplugin"
+          translator_asset="codex-local-translator-${tag}.bobplugin"
+          ocr_asset="codex-local-ocr-${tag}.bobplugin"
           mkdir -p dist
-          zip -j "dist/${asset}" plugin/info.json plugin/main.js
-          sha256sum "dist/${asset}" > "dist/${asset}.sha256"
+          zip -j "dist/${translator_asset}" plugin/info.json plugin/main.js
+          zip -j "dist/${ocr_asset}" ocr-plugin/info.json plugin/main.js
+          sha256sum "dist/${translator_asset}" > "dist/${translator_asset}.sha256"
+          sha256sum "dist/${ocr_asset}" > "dist/${ocr_asset}.sha256"
 
           echo "tag=${tag}" >> "$GITHUB_OUTPUT"
-          echo "asset=${asset}" >> "$GITHUB_OUTPUT"
+          echo "translator_asset=${translator_asset}" >> "$GITHUB_OUTPUT"
+          echo "ocr_asset=${ocr_asset}" >> "$GITHUB_OUTPUT"
 
       - name: Check existing release
         id: release
@@ -65,8 +75,10 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create "${{ steps.package.outputs.tag }}" \
-            "dist/${{ steps.package.outputs.asset }}#Bob plugin" \
-            "dist/${{ steps.package.outputs.asset }}.sha256#SHA-256 checksum" \
+            "dist/${{ steps.package.outputs.translator_asset }}#Bob translation plugin" \
+            "dist/${{ steps.package.outputs.translator_asset }}.sha256#Translation plugin SHA-256" \
+            "dist/${{ steps.package.outputs.ocr_asset }}#Bob OCR plugin" \
+            "dist/${{ steps.package.outputs.ocr_asset }}.sha256#OCR plugin SHA-256" \
             --target "$GITHUB_SHA" \
             --title "${{ steps.package.outputs.tag }}" \
             --generate-notes

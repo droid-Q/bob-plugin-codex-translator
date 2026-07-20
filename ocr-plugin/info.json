@@ -1,9 +1,9 @@
 {
-  "identifier": "com.codex.bob.translate",
+  "identifier": "com.codex.bob.ocr",
   "version": "0.2.0",
-  "category": "translate",
-  "name": "Codex 本机翻译",
-  "summary": "通过本机 Codex CLI 翻译文本",
+  "category": "ocr",
+  "name": "Codex 本机 OCR",
+  "summary": "通过本机 Codex CLI 识别截图文字",
   "homepage": "https://github.com/droid-Q/bob-plugin-codex-translator/blob/main/README.md#使用",
   "minBobVersion": "1.8.0",
   "options": [
@@ -16,7 +16,7 @@
         "type": "visible",
         "placeholderText": "http://127.0.0.1:8765"
       },
-      "desc": "启动桥接服务后，打开其输出的配置地址并选择 Codex 模型。"
+      "desc": "启动桥接服务后，打开其输出的配置地址并选择支持图片的 Codex 模型。"
     }
   ]
 }

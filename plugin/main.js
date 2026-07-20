@@ -126,6 +126,55 @@ function translate(query, completion) {
   });
 }
 
+function ocr(query, completion) {
+  if (!query.image || typeof query.image.toBase64 !== 'function') {
+    completion({ error: serviceError('param', '截图数据无效。') });
+    return;
+  }
+
+  discoverBridge(function (url) {
+    if (!url) {
+      completion({ error: serviceError('network', '无法连接本机 Codex 桥接服务。') });
+      return;
+    }
+
+    $http.request({
+      method: 'POST',
+      url: url + '/ocr',
+      header: { 'Content-Type': 'application/json' },
+      body: {
+        image: query.image.toBase64(),
+        from: query.detectFrom || query.from
+      },
+      timeout: 300,
+      handler: function (response) {
+        if (response.error) {
+          activeBridgeUrl = null;
+          completion({ error: serviceError('network', response.error.message || '无法连接本机 Codex 桥接服务。') });
+          return;
+        }
+
+        var data = response.data || {};
+        if (!response.response || response.response.statusCode < 200 || response.response.statusCode >= 300) {
+          completion({ error: serviceError('api', data.error || 'Codex 桥接服务返回异常。', data) });
+          return;
+        }
+        if (!Array.isArray(data.texts) || !data.texts.length) {
+          completion({ error: serviceError('api', 'Codex 未识别到文字。', data) });
+          return;
+        }
+
+        completion({
+          result: {
+            from: query.detectFrom || query.from,
+            texts: data.texts.map(function (text) { return { text: text }; })
+          }
+        });
+      }
+    });
+  });
+}
+
 function pluginValidate(completion) {
   discoverBridge(function (url) {
     if (!url) {

@@ -19,8 +19,8 @@ node bridge/bridge.mjs
 保持服务运行，然后：
 
 1. 打开桥接服务输出的配置地址，刷新模型列表、选择模型并保存。
-2. 从 [Releases](https://github.com/droid-Q/bob-plugin-codex-translator/releases/latest) 下载并双击 `.bobplugin` 文件。
-3. 在 Bob 的「偏好设置 → 服务 → 文本翻译」中添加「Codex 本机翻译」。
+2. 从 [Releases](https://github.com/droid-Q/bob-plugin-codex-translator/releases/latest) 下载并双击翻译与 OCR 两个 `.bobplugin` 文件。
+3. 在 Bob 的「文本翻译」服务中添加「Codex 本机翻译」，在「文本识别」服务中添加「Codex 本机 OCR」。
 
 插件默认连接 `http://127.0.0.1:8765`。如果通过 `BOB_CODEX_PORT` 修改端口，也要同步修改 Bob 插件设置中的桥接地址。
 
@@ -43,4 +43,5 @@ node --test test/bridge.test.mjs
 ```bash
 mkdir -p dist
 zip -j dist/codex-local-translator.bobplugin plugin/info.json plugin/main.js
+zip -j dist/codex-local-ocr.bobplugin ocr-plugin/info.json plugin/main.js
 ```
