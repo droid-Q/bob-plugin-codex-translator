@@ -756,7 +756,7 @@ function configPage(port) {
         model.replaceChildren(...models.map((item) => {
           const option = document.createElement('option');
           option.value = item.slug;
-          option.textContent = item.displayName + ' · ' + item.slug;
+          option.textContent = item.displayName;
           return option;
         }));
         if (data.selected && models.some((item) => item.slug === data.selected)) model.value = data.selected;
