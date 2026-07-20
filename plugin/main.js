@@ -78,7 +78,7 @@ function pluginValidate(completion) {
           message: response.error
             ? '无法连接本机 Codex 桥接服务。'
             : '桥接服务尚未选择有效模型。',
-          troubleshootingLink: bridgeUrl() + '/config'
+          troubleshootingLink: 'https://github.com/droid-Q/bob-plugin-codex-translator/blob/main/README.md#使用'
         }
       });
     }
