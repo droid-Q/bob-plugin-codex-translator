@@ -26,27 +26,8 @@ node bridge/bridge.mjs
 
 ## 使用 launchd 常驻运行
 
-在仓库根目录执行：
-
 ```bash
-AGENT_PLIST="$HOME/Library/LaunchAgents/com.codex.bob.translate.bridge.plist"
-BRIDGE_LOG_DIR="$HOME/Library/Logs/BobCodexTranslator"
-REPO_DIR="$(pwd)"
-NODE_BIN="$(command -v node)"
-CODEX_BIN="$(command -v codex)"
-
-mkdir -p "$HOME/Library/LaunchAgents" "$BRIDGE_LOG_DIR"
-cp launchd/com.codex.bob.translate.bridge.plist "$AGENT_PLIST"
-/usr/libexec/PlistBuddy -c "Set :ProgramArguments:0 $NODE_BIN" "$AGENT_PLIST"
-/usr/libexec/PlistBuddy -c "Set :ProgramArguments:1 $REPO_DIR/bridge/bridge.mjs" "$AGENT_PLIST"
-/usr/libexec/PlistBuddy -c "Set :EnvironmentVariables:CODEX_BIN $CODEX_BIN" "$AGENT_PLIST"
-/usr/libexec/PlistBuddy -c "Set :StandardOutPath $BRIDGE_LOG_DIR/bridge.log" "$AGENT_PLIST"
-/usr/libexec/PlistBuddy -c "Set :StandardErrorPath $BRIDGE_LOG_DIR/bridge.error.log" "$AGENT_PLIST"
-plutil -lint "$AGENT_PLIST"
-launchctl bootout "gui/$(id -u)/com.codex.bob.translate.bridge" 2>/dev/null || true
-launchctl bootstrap "gui/$(id -u)" "$AGENT_PLIST"
-launchctl kickstart -k "gui/$(id -u)/com.codex.bob.translate.bridge"
-curl -fsS http://127.0.0.1:8765/health
+./launchd/install.sh
 ```
 
 ## 开发验证
