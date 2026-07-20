@@ -36,9 +36,3 @@ node --test test/bridge.test.mjs
 mkdir -p dist
 zip -j dist/codex-local-translator.bobplugin plugin/info.json plugin/main.js
 ```
-
-## 自动发布
-
-推送到 `main` 后，GitHub Actions 会运行检查，并按 `plugin/info.json` 中的版本创建 `v版本号` Release，上传 `.bobplugin` 和 SHA-256 校验文件。已有版本不会覆盖；发布下一版时先提升 `info.json` 的 `version`。
-
-可选环境变量：`CODEX_BIN` 指定 Codex 可执行文件，`BOB_CODEX_PORT` 指定监听端口，`BOB_CODEX_CONFIG` 指定模型配置文件。默认配置保存在 `~/Library/Application Support/Bob Codex Translator/config.json`。
