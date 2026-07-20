@@ -1,0 +1,22 @@
+{
+  "identifier": "com.codex.bob.translate",
+  "version": "0.1.0",
+  "category": "translate",
+  "name": "Codex 本机翻译",
+  "summary": "通过本机 Codex CLI 翻译文本",
+  "homepage": "http://127.0.0.1:8765/config",
+  "minBobVersion": "1.8.0",
+  "options": [
+    {
+      "identifier": "bridgeUrl",
+      "type": "text",
+      "title": "本机桥接地址",
+      "defaultValue": "http://127.0.0.1:8765",
+      "textConfig": {
+        "type": "visible",
+        "placeholderText": "http://127.0.0.1:8765"
+      },
+      "desc": "启动 bridge/bridge.mjs 后，在 /config 页面刷新并选择 Codex 模型。"
+    }
+  ]
+}
