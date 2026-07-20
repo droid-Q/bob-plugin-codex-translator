@@ -18,7 +18,7 @@ node bridge/bridge.mjs
 
 保持服务运行，然后：
 
-1. 打开 <http://127.0.0.1:8765/config>，刷新模型列表、选择模型并保存。
+1. 打开桥接服务输出的配置地址，刷新模型列表、选择模型并保存。
 2. 从 [Releases](https://github.com/droid-Q/bob-plugin-codex-translator/releases/latest) 下载并双击 `.bobplugin` 文件。
 3. 在 Bob 的「偏好设置 → 服务 → 文本翻译」中添加「Codex 本机翻译」。
 
@@ -29,6 +29,8 @@ node bridge/bridge.mjs
 ```bash
 ./launchd/install.sh
 ```
+
+如果端口被占用，脚本会自动选择后续空闲端口，Bob 插件会自动发现桥接服务。
 
 ## 开发验证
 

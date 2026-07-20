@@ -9,6 +9,7 @@ import { pathToFileURL } from 'node:url';
 
 const HOST = '127.0.0.1';
 const PORT = Number.parseInt(process.env.BOB_CODEX_PORT || '8765', 10);
+const SERVICE_ID = 'bob-codex-translator';
 const CODEX_BIN = process.env.CODEX_BIN || 'codex';
 const CONFIG_PATH = process.env.BOB_CODEX_CONFIG
   || path.join(os.homedir(), 'Library', 'Application Support', 'Bob Codex Translator', 'config.json');
@@ -258,10 +259,17 @@ async function handleRequest(request, response) {
       return;
     }
 
+    if (request.method === 'GET' && url.pathname === '/ping') {
+      sendJson(response, 200, { ok: true, service: SERVICE_ID, port: PORT });
+      return;
+    }
+
     if (request.method === 'GET' && url.pathname === '/health') {
       const [models, config] = await Promise.all([getModels(), readConfig()]);
       sendJson(response, 200, {
         ok: true,
+        service: SERVICE_ID,
+        port: PORT,
         configured: models.some((model) => model.slug === config.model),
         model: config.model || null,
       });

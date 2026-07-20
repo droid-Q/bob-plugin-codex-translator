@@ -11,6 +11,8 @@
   </array>
   <key>EnvironmentVariables</key>
   <dict>
+    <key>BOB_CODEX_PORT</key>
+    <string>__PORT__</string>
     <key>CODEX_BIN</key>
     <string>__CODEX_BIN__</string>
   </dict>
